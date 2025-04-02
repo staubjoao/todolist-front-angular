@@ -1,0 +1,9 @@
+<div class="task"
+  (dblclick)="onToggle(tarefa)"
+  [ngClass]="{reminder: tarefa.concluido}"
+>
+  <h3>{{tarefa.titulo}}
+    <i class="pi pi-times" style="color: red;" (click)="onDelete(tarefa)"></i>
+  </h3>
+  <p>{{tarefa.categoria}}</p>
+</div>
