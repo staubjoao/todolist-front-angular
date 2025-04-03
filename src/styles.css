@@ -71,3 +71,31 @@ body {
   flex: 2;
   height: 20px;
 }
+
+.status-pendente {
+  background-color: #FFF3CD;
+  color: #856404;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.status-concluido {
+  background-color: #D4EDDA;
+  color: #155724;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.status-cancelado {
+  background-color: #F8D7DA;
+  color: #721C24;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.status-em-andamento {
+  background-color: #CCE5FF;
+  color: #004085;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}

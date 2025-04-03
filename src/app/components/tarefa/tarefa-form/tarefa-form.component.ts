@@ -42,7 +42,7 @@ export class TarefaFormComponent implements OnInit {
   descricao: string = '';
   categoriaSelecionada: Categoria | undefined;
   status: string = '';
-  dataFinal: string = '';
+  dataFinal: Date | undefined;
   categoriaLista: Categoria[] = [];
   mostrarAddTarefa: boolean = true;
   statusLista = Object.entries(StatusTarefa).map(([value, label]) => ({ value, label }));
@@ -75,13 +75,7 @@ export class TarefaFormComponent implements OnInit {
       this.descricao = this.tarefaParaEdicao.descricao;
       this.categoriaSelecionada = this.tarefaParaEdicao.categoria;
       this.status = this.tarefaParaEdicao.status;
-      const data = new Date(this.tarefaParaEdicao.dataFinal);
-      const dia = String(data.getDate()).padStart(2, '0');
-      const mes = String(data.getMonth() + 1).padStart(2, '0');
-      const ano = data.getFullYear();
-      const horas = String(data.getHours()).padStart(2, '0');
-      const minutos = String(data.getMinutes()).padStart(2, '0');
-      this.dataFinal = `${dia}/${mes}/${ano} ${horas}:${minutos}`;
+      this.dataFinal = new Date(this.tarefaParaEdicao.dataFinal);
       this.modoEdicao = true;
     } else {
       this.limparCampos();
@@ -89,30 +83,36 @@ export class TarefaFormComponent implements OnInit {
     }
   }
 
+  formatarDataStringParaAPI() {
+    if (!this.dataFinal || isNaN(this.dataFinal.getTime())) {
+      console.error('Data inválida:', this.dataFinal);
+      return null;
+    }
+
+    const dia = String(this.dataFinal.getDate()).padStart(2, '0');
+    const mes = String(this.dataFinal.getMonth() + 1).padStart(2, '0');
+    const ano = this.dataFinal.getFullYear();
+    const horas = String(this.dataFinal.getHours()).padStart(2, '0');
+    const minutos = String(this.dataFinal.getMinutes()).padStart(2, '0');
+
+    const formattedDate = `${ano}-${mes}-${dia}T${horas}:${minutos}:00`;
+    console.log(formattedDate);
+    return formattedDate;
+  }
+
   alteraVisualizacao(valor: boolean) {
     this.mostrarAddTarefa = valor;
   }
 
   salvar() {
-    const dataFinalFormatada = new Date(this.dataFinal);
-
-    const pad = (num: number) => num.toString().padStart(2, '0');
-
-    const ano = dataFinalFormatada.getFullYear();
-    const mes = pad(dataFinalFormatada.getMonth() + 1);
-    const dia = pad(dataFinalFormatada.getDate());
-    const horas = pad(dataFinalFormatada.getHours());
-    const minutos = pad(dataFinalFormatada.getMinutes());
-    const segundos = pad(dataFinalFormatada.getSeconds());
-
-    const dataFinalISO = `${ano}-${mes}-${dia}T${horas}:${minutos}:${segundos}`;
+    const formattedDate = this.formatarDataStringParaAPI();
 
     const tarefaDTO: TarefaDTO = {
       titulo: this.titulo,
       descricao: this.descricao,
       idCategoria: this.categoriaSelecionada?.id || 0,
       status: this.status,
-      dataFinal: dataFinalISO
+      dataFinal: formattedDate ? formattedDate.toString() : ''
     };
 
     console.log(tarefaDTO);
@@ -182,7 +182,7 @@ export class TarefaFormComponent implements OnInit {
     this.descricao = '';
     this.categoriaSelecionada = undefined;
     this.status = '';
-    this.dataFinal = '';
+    this.dataFinal = undefined;
   }
 
 }

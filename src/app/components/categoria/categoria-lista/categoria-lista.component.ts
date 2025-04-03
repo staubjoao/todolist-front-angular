@@ -6,6 +6,7 @@ import { CategoriaService } from '../../../services/categoria/categoria.service'
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { SliceTextPipe } from "../../../pipes/slice-text.pipe";
 
 @Component({
   selector: 'app-categoria-lista',
@@ -14,7 +15,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     HeaderComponent,
     CategoriaFormComponent,
     TableModule,
-    ButtonModule
+    ButtonModule,
+    SliceTextPipe
 ],
   templateUrl: './categoria-lista.component.html',
   styleUrl: './categoria-lista.component.css'

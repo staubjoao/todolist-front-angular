@@ -31,7 +31,7 @@
 </div>
 <div class="grid align-items-center">
   <div class="col-3 mt-5">
-    <p-button type="button" label="Salvar" [style]="{ width: '100%' }" class="mt-4 md:mt-0" (onClick)="salvar()"
+    <p-button type="button" [label]="modoEdicao? 'Alterar' : 'Salvar'" [style]="{ width: '100%' }" class="mt-4 md:mt-0" (onClick)="salvar()"
       [disabled]="!titulo || !dataFinal || !descricao || !status">
       <i class="pi pi-check"></i>
     </p-button>

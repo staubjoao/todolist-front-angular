@@ -7,11 +7,13 @@ import { ButtonModule } from 'primeng/button';
 import { TarefaService } from '../../../services/tarefa/tarefa.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DateFormatPipe } from "../../../pipes/date-format.pipe";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-tarefa-lista',
   standalone: true,
   imports: [
+    CommonModule,
     HeaderComponent,
     TarefaFormComponent,
     TableModule,
@@ -82,4 +84,20 @@ export class TarefaListaComponent {
     );
     this.tarefaParaEdicao = null;
   }
+
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'PENDENTE':
+        return 'status-pendente';
+      case 'EM_ANDAMENTO':
+        return 'status-em-andamento';
+      case 'CONCLUIDA':
+        return 'status-concluido';
+      case 'CANCELADA':
+        return 'status-cancelado';
+      default:
+        return '';
+    }
+  }
+
 }

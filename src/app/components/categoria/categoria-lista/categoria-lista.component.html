@@ -22,7 +22,7 @@
       <tr>
         <td>{{ categoria.id }}</td>
         <td>{{ categoria.nome }}</td>
-        <td>{{ categoria.descricao }}</td>
+        <td>{{ categoria.descricao | sliceText }}</td>
         <td>
           <button pButton icon="pi pi-pencil" class="p-button-success p-button-sm"
             (click)="alterarCategoria(categoria)"></button>
