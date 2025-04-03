@@ -64,7 +64,7 @@ export class TarefaFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['categoriaParaEdicao']) {
+    if (changes['tarefaParaEdicao']) {
       this.carregarDadosParaEdicao();
     }
   }
@@ -75,9 +75,17 @@ export class TarefaFormComponent implements OnInit {
       this.descricao = this.tarefaParaEdicao.descricao;
       this.categoriaSelecionada = this.tarefaParaEdicao.categoria;
       this.status = this.tarefaParaEdicao.status;
-      this.dataFinal = this.tarefaParaEdicao.dataFinal;
+      const data = new Date(this.tarefaParaEdicao.dataFinal);
+      const dia = String(data.getDate()).padStart(2, '0');
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const ano = data.getFullYear();
+      const horas = String(data.getHours()).padStart(2, '0');
+      const minutos = String(data.getMinutes()).padStart(2, '0');
+      this.dataFinal = `${dia}/${mes}/${ano} ${horas}:${minutos}`;
+      this.modoEdicao = true;
     } else {
       this.limparCampos();
+      this.modoEdicao = false;
     }
   }
 
@@ -86,12 +94,25 @@ export class TarefaFormComponent implements OnInit {
   }
 
   salvar() {
+    const dataFinalFormatada = new Date(this.dataFinal);
+
+    const pad = (num: number) => num.toString().padStart(2, '0');
+
+    const ano = dataFinalFormatada.getFullYear();
+    const mes = pad(dataFinalFormatada.getMonth() + 1);
+    const dia = pad(dataFinalFormatada.getDate());
+    const horas = pad(dataFinalFormatada.getHours());
+    const minutos = pad(dataFinalFormatada.getMinutes());
+    const segundos = pad(dataFinalFormatada.getSeconds());
+
+    const dataFinalISO = `${ano}-${mes}-${dia}T${horas}:${minutos}:${segundos}`;
+
     const tarefaDTO: TarefaDTO = {
       titulo: this.titulo,
       descricao: this.descricao,
       idCategoria: this.categoriaSelecionada?.id || 0,
       status: this.status,
-      dataFinal: this.dataFinal
+      dataFinal: dataFinalISO
     };
 
     console.log(tarefaDTO);

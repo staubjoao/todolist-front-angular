@@ -6,6 +6,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TarefaService } from '../../../services/tarefa/tarefa.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { DateFormatPipe } from "../../../pipes/date-format.pipe";
 
 @Component({
   selector: 'app-tarefa-lista',
@@ -14,7 +15,9 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     HeaderComponent,
     TarefaFormComponent,
     TableModule,
-    ButtonModule],
+    ButtonModule,
+    DateFormatPipe
+  ],
   templateUrl: './tarefa-lista.component.html',
   styleUrl: './tarefa-lista.component.css'
 })
@@ -26,46 +29,46 @@ export class TarefaListaComponent {
   loading: boolean = true;
 
   constructor(private tarefaService: TarefaService,
-      private confirmationService: ConfirmationService,
-      private messageService: MessageService
-    ) {}
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
+  ) { }
 
-    ngOnInit(): void {
-      this.carregarTodasTarefas();
-    }
+  ngOnInit(): void {
+    this.carregarTodasTarefas();
+  }
 
-    carregarTodasTarefas() {
-      this.loading = true;
-      this.tarefaService.obterTodasTarefas().subscribe((tarefas: Tarefa[]) => {
-        this.tarefas = tarefas;
-        this.loading = false;
-        console.log(tarefas)
-      });
-    }
+  carregarTodasTarefas() {
+    this.loading = true;
+    this.tarefaService.obterTodasTarefas().subscribe((tarefas: Tarefa[]) => {
+      this.tarefas = tarefas;
+      this.loading = false;
+      console.log(tarefas)
+    });
+  }
 
-    confirmarExclusao(tarefaId: number) {
-      this.confirmationService.confirm({
-        message: 'Tem certeza que deseja excluir esta tarefa?',
-        header: 'Confirmação',
-        icon: 'pi pi-exclamation-triangle',
-        acceptLabel: 'Sim',
-        rejectLabel: 'Não',
-        accept: () => {
-          this.tarefaService.deletarTarefa(tarefaId).subscribe({
-            next: () => {
-              this.tarefas = this.tarefas.filter(categoria => categoria.id !== tarefaId);
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Sucesso',
-                detail: 'Tarefa excluída com sucesso!'
-              });
-            }
-          });
-        }
-      });
-    }
+  confirmarExclusao(tarefaId: number) {
+    this.confirmationService.confirm({
+      message: 'Tem certeza que deseja excluir esta tarefa?',
+      header: 'Confirmação',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      accept: () => {
+        this.tarefaService.deletarTarefa(tarefaId).subscribe({
+          next: () => {
+            this.tarefas = this.tarefas.filter(categoria => categoria.id !== tarefaId);
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Sucesso',
+              detail: 'Tarefa excluída com sucesso!'
+            });
+          }
+        });
+      }
+    });
+  }
 
-    alterarTarefa(tarefa: Tarefa) {
+  alterarTarefa(tarefa: Tarefa) {
     this.tarefaParaEdicao = tarefa;
   }
 
