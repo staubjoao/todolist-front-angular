@@ -1,5 +1,7 @@
 export interface TarefaDTO {
-  tarefa: string,
-  categoria: string,
-  idCategoria: number
+  titulo: string,
+  descricao: string,
+  idCategoria: number,
+  status: string,
+  dataFinal: string
 }
