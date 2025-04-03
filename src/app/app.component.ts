@@ -1,11 +1,17 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from './components/header/header.component';
-import { TarefaFormComponent } from './components/tarefa-form/tarefa-form.component';
+import { MenuBarComponent } from "./components/menu-bar/menu-bar.component";
+import { RouterOutlet } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [HeaderComponent, TarefaFormComponent],
+  imports: [
+    MenuBarComponent,
+    RouterOutlet,
+    ToastModule,
+    ConfirmDialogModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

@@ -1,0 +1,45 @@
+<div class="grid">
+  <div class="col-6 flex flex-column">
+    <label for="titulo" class="form-label">Título</label>
+    <input pInputText class="p-fluid" id="titulo" name="titulo" [(ngModel)]="titulo" />
+  </div>
+  <div class="col-6 flex flex-column">
+    <label for="dataFinal" class="form-label">Data Final</label>
+    <p-datepicker id="dataFinal" name="dataFinal" [(ngModel)]="dataFinal" dateFormat="dd/mm/yy"
+      [style]="{ width: '100%' }" [showTime]="true" [appendTo]="'body'"></p-datepicker>
+  </div>
+</div>
+<div class="grid">
+  <div class="col-12 flex flex-column">
+    <label for="descricao" class="form-label">Descrição</label>
+    <textarea rows="5" cols="30" pTextarea [(ngModel)]="descricao" name="descricao" maxlength="500"
+      style="resize: none;"></textarea>
+  </div>
+</div>
+<div class="grid align-items-center">
+  <div class="col-6 flex flex-column">
+    <label for="status" class="form-label">Categoria</label>
+    <p-dropdown [options]="categoriaLista" id="categoria" [(ngModel)]="categoriaSelecionada" optionLabel="nome"
+      placeholder="Selecione a categoria" [appendTo]="'body'" />
+  </div>
+  <div class="col-6 mt-5">
+    <p-button type="button" label="Adicionar nova categoria" icon="pi pi-plus" iconPos="left"
+      (onClick)="adicionarNovaCategoria()" [style]="{ width: '100%', backgroundColor: 'blue', color: 'white' }"
+      class="mt-4 md:mt-0">
+    </p-button>
+  </div>
+</div>
+<div class="grid align-items-center">
+  <div class="col-9">
+    <label for="status" class="form-label">Status atividade</label>
+    <p-select [options]="statusLista" [(ngModel)]="status" id="status" name="status" optionLabel="label"
+      optionValue="value" placeholder="Selecione o status" class="w-full" [appendTo]="'body'">
+    </p-select>
+  </div>
+  <div class="col-3 mt-5">
+    <p-button type="button" label="Salvar" [style]="{ width: '100%' }" class="mt-4 md:mt-0" (onClick)="salvar()"
+      [disabled]="!titulo || !dataFinal || !descricao || !status">
+      <i class="pi pi-check"></i>
+    </p-button>
+  </div>
+</div>

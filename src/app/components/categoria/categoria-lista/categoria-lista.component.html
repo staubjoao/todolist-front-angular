@@ -1,0 +1,36 @@
+<app-header title="Categorias"></app-header>
+<app-categoria-form (categoriaAdicionada)="onCategoriaAdicionada($event)">
+</app-categoria-form>
+
+<div class="card mt-4">
+  <p-table [value]="categorias" [loading]="loading" [paginator]="true" [rows]="5" styleClass="p-datatable-striped"
+    [globalFilterFields]="['nome']">
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th style="width: 120px">Ações</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-categoria>
+      <tr>
+        <td>{{ categoria.id }}</td>
+        <td>{{ categoria.nome }}</td>
+        <td>{{ categoria.descricao }}</td>
+        <td>
+          <button pButton icon="pi pi-trash" class="p-button-danger p-button-sm"
+            (click)="confirmarExclusao(categoria.id)"></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4">Nenhuma categoria encontrada</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

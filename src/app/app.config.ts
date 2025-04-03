@@ -5,6 +5,8 @@ import Aura from '@primeng/themes/aura';
 
 import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
+import { provideHttpClient } from '@angular/common/http';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +20,9 @@ export const appConfig: ApplicationConfig = {
           darkModeSelector: false
         }
       },
-    })
+    }),
+    provideHttpClient(),
+    MessageService,
+    ConfirmationService
   ]
 };

@@ -1,15 +1,16 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, OnInit, Output } from '@angular/core';
-import { TarefaDTO } from '../../model/tarefa/tarrefa-dto.model';
-import { Categoria } from '../../model/categoria/categoria.model';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
-import { StatusTarefa } from '../../enums/tarefa-status.enum';
 import { FormsModule } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TextareaModule } from 'primeng/textarea';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { DropdownModule } from 'primeng/dropdown';
+import { TarefaDTO } from '../../../model/tarefa/tarrefa-dto.model';
+import { Categoria } from '../../../model/categoria/categoria.model';
+import { CategoriaService } from '../../../services/categoria/categoria.service';
+import { StatusTarefa } from '../../../enums/tarefa-status.enum';
 
 
 @Component({
@@ -30,7 +31,6 @@ import { DropdownModule } from 'primeng/dropdown';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TarefaFormComponent implements OnInit {
-  @Output() onAddTask = new EventEmitter<TarefaDTO>();
 
   titulo: string = '';
   descricao: string = '';
@@ -41,16 +41,15 @@ export class TarefaFormComponent implements OnInit {
   mostrarAddTarefa: boolean = true;
   statusLista = Object.entries(StatusTarefa).map(([value, label]) => ({ value, label }));
 
-  constructor() {
+  constructor(private categoriaService: CategoriaService) {
     console.log(this.statusLista);
   }
 
   ngOnInit(): void {
-    // this.categoriaLista = [
-    //   { id: 1, nome: 'Trabalho', descricao: 'Tarefas relacionadas ao trabalho', dataCriacao: '2023-01-01', dataAlteracao: '2023-01-01' },
-    //   { id: 2, nome: 'Pessoal', descricao: 'Tarefas pessoais', dataCriacao: '2023-01-01', dataAlteracao: '2023-01-01' },
-    //   { id: 3, nome: 'Estudo', descricao: 'Tarefas de estudo', dataCriacao: '2023-01-01', dataAlteracao: '2023-01-01' }
-    // ];
+    this.categoriaService.obeterTodasCategorias().subscribe((categorias: Categoria[]) => {
+      this.categoriaLista = categorias;
+      console.log(this.categoriaLista);
+    });
   }
 
   alteraVisualizacao(valor: boolean) {
@@ -61,7 +60,7 @@ export class TarefaFormComponent implements OnInit {
     console.log('Adicionar nova categoria');
   }
 
-  onSubmit() {
+  salvar() {
     const tarefaDTO: TarefaDTO = {
       titulo: this.titulo,
       descricao: this.descricao,
@@ -72,7 +71,6 @@ export class TarefaFormComponent implements OnInit {
 
     console.log(tarefaDTO);
 
-    this.onAddTask.emit(tarefaDTO);
     this.titulo = '';
     this.descricao = '';
     this.categoriaSelecionada = undefined;

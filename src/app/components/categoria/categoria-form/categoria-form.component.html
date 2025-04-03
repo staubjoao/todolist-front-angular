@@ -1,0 +1,23 @@
+<div class="grid">
+  <div class="col-12 flex flex-column">
+    <label for="nome" class="form-label">Nome</label>
+    <input pInputText class="p-fluid" id="nome" name="nome" [(ngModel)]="nome" maxlength="100" />
+  </div>
+</div>
+<div class="grid">
+  <div class="col-12 flex flex-column">
+    <label for="descricao" class="form-label">Descrição</label>
+    <textarea rows="5" cols="30" pTextarea [(ngModel)]="descricao" name="descricao" maxlength="500"
+      style="resize: none;"></textarea>
+  </div>
+</div>
+<div class="grid">
+  <div class="col-3 mt-5">
+    <p-button type="button" label="Salvar" [style]="{ width: '100%' }" class="mt-4 md:mt-0" (onClick)="salvar()"
+      [disabled]="!nome || !descricao">
+      <ng-template pTemplate="icon">
+        <i class="pi pi-check"></i>
+      </ng-template>
+    </p-button>
+  </div>
+</div>
