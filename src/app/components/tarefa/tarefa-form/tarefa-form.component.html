@@ -22,20 +22,14 @@
     <p-dropdown [options]="categoriaLista" id="categoria" [(ngModel)]="categoriaSelecionada" optionLabel="nome"
       placeholder="Selecione a categoria" [appendTo]="'body'" />
   </div>
-  <div class="col-6 mt-5">
-    <p-button type="button" label="Adicionar nova categoria" icon="pi pi-plus" iconPos="left"
-      (onClick)="adicionarNovaCategoria()" [style]="{ width: '100%', backgroundColor: 'blue', color: 'white' }"
-      class="mt-4 md:mt-0">
-    </p-button>
-  </div>
-</div>
-<div class="grid align-items-center">
-  <div class="col-9">
+  <div class="col-6 flex flex-column">
     <label for="status" class="form-label">Status atividade</label>
     <p-select [options]="statusLista" [(ngModel)]="status" id="status" name="status" optionLabel="label"
       optionValue="value" placeholder="Selecione o status" class="w-full" [appendTo]="'body'">
     </p-select>
   </div>
+</div>
+<div class="grid align-items-center">
   <div class="col-3 mt-5">
     <p-button type="button" label="Salvar" [style]="{ width: '100%' }" class="mt-4 md:mt-0" (onClick)="salvar()"
       [disabled]="!titulo || !dataFinal || !descricao || !status">

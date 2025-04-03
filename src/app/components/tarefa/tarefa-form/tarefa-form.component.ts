@@ -1,4 +1,5 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, OnInit, Output } from '@angular/core';
+import { TarefaService } from './../../../services/tarefa/tarefa.service';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
@@ -11,7 +12,8 @@ import { TarefaDTO } from '../../../model/tarefa/tarrefa-dto.model';
 import { Categoria } from '../../../model/categoria/categoria.model';
 import { CategoriaService } from '../../../services/categoria/categoria.service';
 import { StatusTarefa } from '../../../enums/tarefa-status.enum';
-
+import { Tarefa } from '../../../model/tarefa/tarefa.model';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-tarefa-form',
@@ -31,7 +33,11 @@ import { StatusTarefa } from '../../../enums/tarefa-status.enum';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TarefaFormComponent implements OnInit {
+  @Input() tarefaParaEdicao: Tarefa | null = null;
+  @Output() tarefaAdicionada = new EventEmitter<Tarefa>();
+  @Output() tarefaAtualizada = new EventEmitter<Tarefa>();
 
+  modoEdicao: boolean = false;
   titulo: string = '';
   descricao: string = '';
   categoriaSelecionada: Categoria | undefined;
@@ -41,7 +47,10 @@ export class TarefaFormComponent implements OnInit {
   mostrarAddTarefa: boolean = true;
   statusLista = Object.entries(StatusTarefa).map(([value, label]) => ({ value, label }));
 
-  constructor(private categoriaService: CategoriaService) {
+  constructor(private categoriaService: CategoriaService,
+    private tarefaService: TarefaService,
+    private messageService: MessageService
+  ) {
     console.log(this.statusLista);
   }
 
@@ -50,14 +59,30 @@ export class TarefaFormComponent implements OnInit {
       this.categoriaLista = categorias;
       console.log(this.categoriaLista);
     });
+
+    this.carregarDadosParaEdicao();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['categoriaParaEdicao']) {
+      this.carregarDadosParaEdicao();
+    }
+  }
+
+  carregarDadosParaEdicao(): void {
+    if (this.tarefaParaEdicao) {
+      this.titulo = this.tarefaParaEdicao.titulo;
+      this.descricao = this.tarefaParaEdicao.descricao;
+      this.categoriaSelecionada = this.tarefaParaEdicao.categoria;
+      this.status = this.tarefaParaEdicao.status;
+      this.dataFinal = this.tarefaParaEdicao.dataFinal;
+    } else {
+      this.limparCampos();
+    }
   }
 
   alteraVisualizacao(valor: boolean) {
     this.mostrarAddTarefa = valor;
-  }
-
-  adicionarNovaCategoria() {
-    console.log('Adicionar nova categoria');
   }
 
   salvar() {
@@ -71,10 +96,71 @@ export class TarefaFormComponent implements OnInit {
 
     console.log(tarefaDTO);
 
+    if (this.modoEdicao) {
+      if (this.tarefaParaEdicao?.id !== undefined) {
+        this.atualizarTarefa(tarefaDTO, this.tarefaParaEdicao.id);
+      } else {
+        console.error('Erro: ID da tarefa para edição é inválido.');
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'ID da tarefa para edição é inválido.'
+        });
+      }
+    } else {
+      this.criarNovaTarefa(tarefaDTO);
+    }
+  }
+
+  criarNovaTarefa(tarefaDTO: TarefaDTO) {
+    this.tarefaService.salvarNovaTarefa(tarefaDTO).subscribe({
+      next: (tarefa) => {
+        this.tarefaAdicionada.emit(tarefa);
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Tarefa adicionada com sucesso!'
+        });
+        this.limparCampos();
+      },
+      error: (erro) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Falha ao adicionar a tarefa'
+        });
+      }
+    });
+  }
+
+  atualizarTarefa(tarefaDTO: TarefaDTO, idTarefa: number) {
+    this.tarefaService.alterarTarefa(tarefaDTO, idTarefa).subscribe({
+      next: (tarefa) => {
+        this.tarefaAtualizada.emit(tarefa);
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Tarefa atualizada com sucesso!'
+        });
+        this.limparCampos();
+      },
+      error: (erro) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Falha ao atualizar a tarefa'
+        });
+      }
+    });
+  }
+
+  limparCampos() {
     this.titulo = '';
     this.descricao = '';
     this.categoriaSelecionada = undefined;
-    this.status = StatusTarefa.PENDENTE;
+    this.status = '';
     this.dataFinal = '';
   }
 

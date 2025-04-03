@@ -10,4 +10,5 @@ export interface Tarefa {
   dataAlteracao: string,
   categoria: Categoria,
   status: string,
+  dataFinal: string,
 }
