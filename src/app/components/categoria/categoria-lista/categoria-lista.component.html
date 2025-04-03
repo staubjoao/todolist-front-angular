@@ -1,5 +1,8 @@
 <app-header title="Categorias"></app-header>
-<app-categoria-form (categoriaAdicionada)="onCategoriaAdicionada($event)">
+<app-categoria-form
+  [categoriaParaEdicao]="categoriaParaEdicao"
+  (categoriaAdicionada)="onCategoriaAdicionada($event)"
+  (categoriaAtualizada)="onCategoriaAtualizada($event)">
 </app-categoria-form>
 
 <div class="card mt-4">
@@ -21,7 +24,9 @@
         <td>{{ categoria.nome }}</td>
         <td>{{ categoria.descricao }}</td>
         <td>
-          <button pButton icon="pi pi-trash" class="p-button-danger p-button-sm"
+          <button pButton icon="pi pi-pencil" class="p-button-success p-button-sm"
+            (click)="alterarCategoria(categoria)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-danger p-button-sm ml-1"
             (click)="confirmarExclusao(categoria.id)"></button>
         </td>
       </tr>

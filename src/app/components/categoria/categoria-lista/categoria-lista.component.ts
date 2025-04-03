@@ -22,6 +22,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 export class CategoriaListaComponent implements OnInit {
 
   categorias: Categoria[] = [];
+  categoriaParaEdicao: Categoria | null = null;
 
   loading: boolean = true;
 
@@ -64,7 +65,19 @@ export class CategoriaListaComponent implements OnInit {
     });
   }
 
+  alterarCategoria(categoria: Categoria) {
+    this.categoriaParaEdicao = categoria;
+  }
+
   onCategoriaAdicionada(novaCategoria: Categoria): void {
     this.categorias = [novaCategoria, ...this.categorias];
   }
+
+  onCategoriaAtualizada(categoriaAtualizada: Categoria): void {
+    this.categorias = this.categorias.map(c =>
+      c.id === categoriaAtualizada.id ? categoriaAtualizada : c
+    );
+    this.categoriaParaEdicao = null;
+  }
+
 }
